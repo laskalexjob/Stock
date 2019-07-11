@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.9.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.9.2\lib\net45\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -62,8 +65,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Paging\Paging.cs" />
+    <Compile Include="Services\Interfaces\IVenderDataService.cs" />
+    <Compile Include="Services\VenderDataService.cs" />
     <Compile Include="Startup\Bootstrapper.cs" />
     <Compile Include="Utils\CustomCommand.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -107,6 +114,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Stock.DataAccess\Stock.DataAccess.csproj">
+      <Project>{3B84E2BF-5EAB-4DA1-A3BC-7AFFA304FF01}</Project>
+      <Name>Stock.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stock.Model\Stock.Model.csproj">
+      <Project>{97C1D805-40E5-4F0A-9C00-E4C0D02AF086}</Project>
+      <Name>Stock.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
