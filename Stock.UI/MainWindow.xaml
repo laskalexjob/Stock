@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Stock.UI"
         xmlns:vm="clr-namespace:Stock.UI.ViewModels"
         mc:Ignorable="d"
+        xmlns:views="clr-namespace:Stock.UI.Views"
         Title="MainWindow" Height="450" Width="800"
                            MinHeight="300" MinWidth="600">
 
@@ -25,47 +26,10 @@
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row='1' Grid.RowSpan='3' Grid.Column="0">
-            <Button Content='Next'
-                    Command="{Binding CommandNext}"
-                    x:Name='NextButton'
-                    Margin='16 6' />
-            <Button Content='Previous'
-                    Command='{Binding CommandBack}'
-                    x:Name='PreviousButton'
-                    Margin='16 6' />
-            <Button Content='First'
-                    Command='{Binding CommandFirst}'
-                    x:Name='FirstButton'
-                    Margin='16 6' />
-            <Button Content='Last'
-                    Command='{Binding CommandLast}'
-                    x:Name='LastButton'
-                    Margin='16 6' />
-            <StackPanel Orientation='Vertical'
-                        HorizontalAlignment='Center'>
-                <ComboBox Width="50"
-                          ItemsSource="{Binding RecordsToShow}"
-                          SelectedValue="{Binding NumberOfRecords, Mode=TwoWay}"/>
-                <TextBlock Text='{Binding Path=TitleLable}' FontSize="13"/>
+        <views:PaginationPanel Grid.Row='1' Grid.Column="0"
+                               Grid.RowSpan='3'/>
+        <views:ContentGridPanel Grid.Column='1' Grid.Row='1'
+                                Grid.RowSpan='3' Grid.ColumnSpan='3'/>
 
-            </StackPanel>
-        </StackPanel>
-
-        <DataGrid AlternatingRowBackground="Gray" ItemsSource="{Binding DataVenderTable}"
-                      Grid.Column='1' Grid.Row='1'
-                      Grid.RowSpan='3'
-                      Grid.ColumnSpan='3'
-                      Margin='8'
-                  AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Path=Id, Mode=TwoWay}" />
-                <DataGridTextColumn Header="Name" Binding="{Binding Path=Name, Mode=TwoWay}" />
-                <DataGridTextColumn Header="Address" Binding="{Binding Path=Address, Mode=TwoWay}" />
-
-
-            </DataGrid.Columns>
-        </DataGrid>
-        
     </Grid>
 </Window>
