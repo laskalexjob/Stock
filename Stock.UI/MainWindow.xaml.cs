@@ -7,9 +7,9 @@ namespace Stock.UI
     {
         public MainWindow(MainViewModel viewModel)
         {
-            InitializeComponent();
-
             DataContext = viewModel;
+
+            InitializeComponent();
         }
     }
 }

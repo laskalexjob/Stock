@@ -26,9 +26,9 @@
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
 
-        <views:PaginationPanel Grid.Row='1' Grid.Column="0"
+        <views:PaginationPanelView Grid.Row='1' Grid.Column="0"
                                Grid.RowSpan='3'/>
-        <views:ContentGridPanel Grid.Column='1' Grid.Row='1'
+        <views:ContentGridPanelView Grid.Column='1' Grid.Row='1'
                                 Grid.RowSpan='3' Grid.ColumnSpan='3'/>
 
     </Grid>

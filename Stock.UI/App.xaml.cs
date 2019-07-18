@@ -4,12 +4,11 @@ using Stock.UI.Startup;
 
 namespace Stock.UI
 {
-    public partial class App : Application
+    public partial class App
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            var bootstrapper = new Bootstrapper();
-            var container = bootstrapper.Bootstrap();
+            var container = new Bootstrapper().Bootstrap();
 
             var mainWindow = container.Resolve<MainWindow>();
 

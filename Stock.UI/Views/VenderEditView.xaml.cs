@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Stock.UI.Views
 {
     /// <summary>
-    /// Interaction logic for ContentGridPanel.xaml
+    /// Interaction logic for VenderEditView.xaml
     /// </summary>
-    public partial class ContentGridPanel : UserControl
+    public partial class VenderEditView : UserControl
     {
-        public ContentGridPanel()
+        public VenderEditView()
         {
             InitializeComponent();
         }

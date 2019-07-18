@@ -4,6 +4,7 @@ using Stock.UI.ViewModels;
 
 namespace Stock.UI.Startup
 {
+
     public class Bootstrapper
     {
         public IContainer Bootstrap()
@@ -18,4 +19,5 @@ namespace Stock.UI.Startup
             return builder.Build();
         }
     }
+
 }

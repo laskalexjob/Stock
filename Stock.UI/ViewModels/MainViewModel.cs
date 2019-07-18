@@ -2,17 +2,20 @@
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Stock.DataAccess;
 using Stock.DataAccess.Repositories;
 using Stock.Model;
+using Stock.UI.Converters;
+using Stock.UI.Services.Interfaces;
 using Stock.UI.Utils;
 
 namespace Stock.UI.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        private IVenderDataService _venderDataService;
+
         private string _titleLable;
         public string TitleLable
         {
@@ -24,14 +27,15 @@ namespace Stock.UI.ViewModels
             }
         }
 
-        private DataView _dataVenderTable;
-        public DataView DataVenderTable
+        private DataView _venderDataView;
+        public DataView VenderDataView
         {
-            get => _dataVenderTable;
+            get => _venderDataView;
             set
             {
-                _dataVenderTable = value;
-                OnPropertyChanged(nameof(DataVenderTable));
+                _venderDataView = value;
+                _venderDataView.Table.AcceptChanges();
+                OnPropertyChanged(nameof(VenderDataView));
             }
         }
 
@@ -54,7 +58,7 @@ namespace Stock.UI.ViewModels
             {
                 _numberOfRecords = value;
 
-                DataVenderTable = PagedTable.First(_myList, value).DefaultView;
+                VenderDataView = PagedTable.First(Venders, value).DefaultView;
 
                 TitleLable = PageNumberDisplay();
 
@@ -62,71 +66,110 @@ namespace Stock.UI.ViewModels
             }
         }
 
-        public ICommand CommandNext { get; }
-        public ICommand CommandBack { get; }
-        public ICommand CommandFirst { get; }
-        public ICommand CommandLast { get; }
-
-        public ObservableCollection<Vender> Venders { get; set; }
+        private ObservableCollection<Vender> _venders;
+        public ObservableCollection<Vender> Venders
+        {
+            get => _venders;
+            set
+            {
+                _venders = value;
+                OnPropertyChanged(nameof(_venders));
+            }
+        }
 
         private static readonly Paging.Paging PagedTable = new Paging.Paging();
-        private static readonly EFGenericRepository<Vender> VenderRepo = new EFGenericRepository<Vender>(new StockDbContext());
-
-        private readonly IList<Vender> _myList = VenderRepo.GetWithInclude(x => x.Items).ToList();
+        private static readonly EfGenericRepository<Vender> VenderRepo = new EfGenericRepository<Vender>(new StockDbContext());
 
         public MainViewModel()
         {
-            CommandNext = new CustomCommand(NextButton_Click);
-            CommandBack = new CustomCommand(PreviousButton_Click);
-            CommandFirst = new CustomCommand(FirstButton_Click);
-            CommandLast = new CustomCommand(LastButton_Click);
+            CommandNext = new RelayCommand(NextButton_Click);
+            CommandBack = new RelayCommand(PreviousButton_Click);
+            CommandFirst = new RelayCommand(FirstButton_Click);
+            CommandLast = new RelayCommand(LastButton_Click);
+            CommandSaveChanges = new RelayCommand(SaveChanges_Click);
+
+            Venders = new ObservableCollection<Vender>();
+
+            PopulateVenders(VenderRepo.GetWithInclude(x => x.Items).ToList(), Venders);
 
             PagedTable.PageIndex = 0; //Sets the Initial Index to a default value
 
-            RecordsToShow = new List<int> { 5, 10, 20, 30, 50, 100 }; //This Array can be any number of groups
+            RecordsToShow = new List<int> { 5, 10, 20, 30, 50 }; //This Array can be any number of groups
 
             NumberOfRecords = 10; //Initialize the ComboBox
+        }
+
+        public void PopulateVenders(IEnumerable<Vender> items, ObservableCollection<Vender> venders)
+        {
+            venders.Clear();
+
+            foreach (var item in items)
+            {
+                venders.Add(item);
+            }
         }
 
         public string PageNumberDisplay()
         {
             var pagedNumber = NumberOfRecords * (PagedTable.PageIndex + 1);
-            if (pagedNumber > _myList.Count)
+            if (pagedNumber > Venders.Count)
             {
-                pagedNumber = _myList.Count;
+                pagedNumber = Venders.Count;
             }
-            return "Showing " + pagedNumber + " of " + _myList.Count; //This dramatically
-                                                                      //reduced the number of times I had to write this string statement
+
+            return "Showing " + pagedNumber + " of " + Venders.Count;
         }
+
+        public ICommand CommandNext { get; }
 
         private void NextButton_Click(object sender)
         {
-            DataVenderTable = PagedTable.Next(_myList, NumberOfRecords).DefaultView;
+            VenderDataView = PagedTable.Next(Venders, NumberOfRecords).DefaultView;
             TitleLable = PageNumberDisplay();
         }
+
+        public ICommand CommandBack { get; }
 
         private void PreviousButton_Click(object sender)
         {
-            DataVenderTable = PagedTable.Previous(_myList, NumberOfRecords).DefaultView;
+            VenderDataView = PagedTable.Previous(Venders, NumberOfRecords).DefaultView;
             TitleLable = PageNumberDisplay();
         }
+
+        public ICommand CommandFirst { get; }
 
         private void FirstButton_Click(object sender)
         {
-            DataVenderTable = PagedTable.First(_myList, NumberOfRecords).DefaultView;
+            VenderDataView = PagedTable.First(Venders, NumberOfRecords).DefaultView;
             TitleLable = PageNumberDisplay();
         }
+
+        public ICommand CommandLast { get; }
 
         private void LastButton_Click(object sender)
         {
-            DataVenderTable = PagedTable.Last(_myList, NumberOfRecords).DefaultView;
+            VenderDataView = PagedTable.Last(Venders, NumberOfRecords).DefaultView;
             TitleLable = PageNumberDisplay();
         }
 
-        private void NumberOfRecords_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public ICommand CommandSaveChanges { get; }
+
+        private void SaveChanges_Click(object sender)
         {
-            DataVenderTable = PagedTable.First(_myList, NumberOfRecords).DefaultView;
-            TitleLable = PageNumberDisplay();
+            var changedRows = VenderDataView.Table.GetChanges();
+
+            if (changedRows != null)
+            {
+                var venders = this.DataTableToList(changedRows);
+
+                VenderRepo.UpdateAll(venders);
+
+                VenderDataView.Table.AcceptChanges();
+
+                Venders.Clear();
+
+                PopulateVenders(VenderRepo.GetWithInclude(x => x.Items).ToList(), Venders);
+            }
         }
     }
 }

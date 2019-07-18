@@ -65,18 +65,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\TableConverter.cs" />
     <Compile Include="Paging\Paging.cs" />
     <Compile Include="Services\Interfaces\IVenderDataService.cs" />
     <Compile Include="Services\VenderDataService.cs" />
-    <Compile Include="Startup\Bootstrapper.cs" />
-    <Compile Include="Utils\CustomCommand.cs" />
+    <Compile Include="Startup\Bootstrap.cs" />
+    <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
-    <Compile Include="Views\ContentGridPanel.xaml.cs">
-      <DependentUpon>ContentGridPanel.xaml</DependentUpon>
+    <Compile Include="Views\ContentGridPanelView.xaml.cs">
+      <DependentUpon>ContentGridPanelView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PaginationPanel.xaml.cs">
-      <DependentUpon>PaginationPanel.xaml</DependentUpon>
+    <Compile Include="Views\PaginationPanelView.xaml.cs">
+      <DependentUpon>PaginationPanelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VenderEditView.xaml.cs">
+      <DependentUpon>VenderEditView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -90,11 +94,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\ContentGridPanel.xaml">
+    <Page Include="Views\ContentGridPanelView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PaginationPanel.xaml">
+    <Page Include="Views\PaginationPanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VenderEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

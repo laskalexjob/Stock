@@ -9,9 +9,9 @@ namespace Stock.UI.Services
 {
     public class VenderDataService : IVenderDataService
     {
-        private Func<EFGenericRepository<Vender>> _vendersRepo;
+        private readonly Func<EfGenericRepository<Vender>> _vendersRepo;
 
-        public VenderDataService(Func<EFGenericRepository<Vender>> verdersRepo)
+        public VenderDataService(Func<EfGenericRepository<Vender>> verdersRepo)
         {
             _vendersRepo = verdersRepo;
         }
